@@ -1,0 +1,10 @@
+import pkg from "../../package.json" with { type: "json" };
+
+export const APP_NAME = "Hono Backend Template";
+export const APP_VERSION = pkg.version;
+export const API_PREFIX = "/api";
+
+export const PAGINATION = {
+	DEFAULT_LIMIT: 10,
+	MAX_LIMIT: 100,
+} as const;
