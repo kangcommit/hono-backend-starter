@@ -1,0 +1,66 @@
+name: hono-backend-template
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.docker
+    
+    ports:
+      - "5432:5432"
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  migrate:
+    image: hono-backend-template:migrate
+
+    build:
+      context: .
+      target: builder
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    command: ["pnpm", "db:deploy"]
+
+    restart: "no"
+
+  api:
+    image: hono-backend-template:latest
+
+    build:
+      context: .
+      target: runner
+
+    env_file:
+      - .env.docker
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+    ports:
+      - "8000:8000"
+
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
