@@ -1,7 +1,7 @@
 import z from "zod";
 import { PAGINATION } from "../config/constants.js";
 
-const sortOrderSchema = z.enum(["asc", "desc"]);
+export const SortOrderSchema = z.enum(["asc", "desc"]);
 
 export const ListQuerySchema = z.object({
 	page: z.coerce.number().int().min(1).default(1),
@@ -12,7 +12,7 @@ export const ListQuerySchema = z.object({
 		.max(PAGINATION.MAX_LIMIT)
 		.default(PAGINATION.DEFAULT_LIMIT),
 	sort: z.string().trim().optional(),
-	order: sortOrderSchema.default("asc"),
+	order: SortOrderSchema.default("asc"),
 });
 
 export const PaginationMetaSchema = z.object({

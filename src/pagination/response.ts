@@ -1,7 +1,7 @@
-import { z } from "@hono/zod-openapi";
+import z, { type ZodType } from "zod";
 import { PaginationMetaSchema } from "./schema.js";
 
-export function createPaginatedResponseSchema<T extends z.ZodTypeAny>(
+export function createPaginatedResponseSchema<T extends ZodType>(
 	itemSchema: T,
 ) {
 	return z.object({
