@@ -1,7 +1,16 @@
-import { API_PREFIX, APP_NAME, APP_VERSION } from "../config/constants.js";
+import type { OpenAPIHono } from "@hono/zod-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
+import {
+	API_PREFIX,
+	APP_NAME,
+	APP_VERSION,
+	OPEN_API_VERSION,
+} from "../config/constants.js";
 
-export const openApiDocument = {
-	openapi: "3.1.0",
+type DocConfig = Parameters<OpenAPIHono["doc"]>[1];
+
+export const openApiDocument: DocConfig = {
+	openapi: OPEN_API_VERSION,
 	info: {
 		title: APP_NAME,
 		version: APP_VERSION,
@@ -18,7 +27,7 @@ export const openApiDocument = {
 	},
 };
 
-export const scalarConfig = {
+export const scalarConfig = Scalar({
 	pageTitle: "API Documentation",
 	sources: [
 		{
@@ -30,4 +39,4 @@ export const scalarConfig = {
 			url: `${API_PREFIX}/auth/open-api/generate-schema`,
 		},
 	],
-};
+});
