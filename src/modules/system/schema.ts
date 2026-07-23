@@ -1,4 +1,4 @@
-import { z } from "@hono/zod-openapi";
+import z from "zod";
 import { APP_STATUS } from "./constants.js";
 
 export const RootResponseSchema = z.object({
