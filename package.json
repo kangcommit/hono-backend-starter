@@ -22,8 +22,8 @@
 		"db:validate": "prisma validate",
 
 		"test": "vitest",
-		"test:unit": "vitest run",
-		"test:integration": "vitest run --config vitest.integration.config.ts",
+		"test:unit": "dotenv -e .env.test -- vitest run",
+		"test:integration": "dotenv -e .env.test -- vitest run --config vitest.integration.config.ts",
 		"test:all": "pnpm test:unit && pnpm test:integration",
 		"test:coverage": "pnpm test:all --coverage",
 
@@ -50,6 +50,7 @@
 		"@scalar/hono-api-reference": "^0.11.11",
 		"better-auth": "^1.6.23",
 		"dotenv": "^17.4.2",
+		"dotenv-cli": "^11.0.0",
 		"hono": "^4.12.31",
 		"pg": "^8.22.0",
 		"pino": "^10.3.1",
