@@ -44,7 +44,6 @@ Whether you're building a personal project or starting a new backend service, th
 
 ```text
 .
-├── Docker/
 ├── prisma/
 ├── src/
 │   ├── auth/
@@ -58,6 +57,9 @@ Whether you're building a personal project or starting a new backend service, th
 │   ├── response/
 │   └── routes/
 ├── tests/
+├── Dockerfile
+├── docker-compose.yml
+├── docker-compose.dev.yml
 └── README.md
 ```
 
@@ -72,7 +74,7 @@ After creating a project from this template, update the following values to matc
 | `package.json`              | Change the project name                    |
 | `README.md`                 | Change the project title and description   |
 | `src/config/constants.ts`   | Update `APP_NAME`                          |
-| `Docker/docker-compose.yml` | Update the Compose project name            |
+| `docker-compose.yml`        | Update the Compose project name            |
 
 # Getting Started
 
@@ -145,7 +147,7 @@ The API will be available at:
 Start only the PostgreSQL database.
 
 ```bash
-docker compose -f Docker/docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml up -d
 ```
 
 ### Production
@@ -153,7 +155,7 @@ docker compose -f Docker/docker-compose.dev.yml up -d
 Run the full application stack.
 
 ```bash
-docker compose -f Docker/docker-compose.yml up --build
+docker compose -f docker-compose.yml up --build
 ```
 
 # API Documentation
@@ -187,10 +189,22 @@ Run tests in watch mode.
 pnpm test
 ```
 
-Run tests once.
+Run unit tests.
 
 ```bash
-pnpm test:run
+pnpm test:unit
+```
+
+Run integration tests.
+
+```bash
+pnpm test:integration
+```
+
+Run all tests.
+
+```bash
+pnpm test:all
 ```
 
 Generate a coverage report.
@@ -204,13 +218,19 @@ pnpm test:coverage
 Run Biome.
 
 ```bash
-pnpm check
+pnpm lint
 ```
 
 Automatically fix formatting and lint issues.
 
 ```bash
-pnpm check:fix
+pnpm lint:fix
+```
+
+Run the full verification suite.
+
+```bash
+pnpm check
 ```
 
 Run TypeScript type checking.
@@ -225,38 +245,41 @@ GitHub Actions automatically performs:
 
 * Dependency installation
 * Prisma Client generation
-* Code quality checks
+* Linting
 * Type checking
-* Unit and integration tests
-* Coverage generation
+* Test execution with coverage
 * Production build
+* Docker image build
 
 # Available Scripts
 
-| Script               | Description                                  |
-| -------------------- | -------------------------------------------- |
-| `pnpm dev`           | Start the development server                 |
-| `pnpm build`         | Build the application                        |
-| `pnpm start`         | Start the production server                  |
-| `pnpm db:generate`   | Generate Prisma Client                       |
-| `pnpm db:migrate`    | Run development migrations                   |
-| `pnpm db:deploy`     | Apply production migrations                  |
-| `pnpm db:studio`     | Open Prisma Studio                           |
-| `pnpm test`          | Run tests in watch mode                      |
-| `pnpm test:run`      | Run tests once                               |
-| `pnpm test:coverage` | Generate a coverage report                   |
-| `pnpm check`         | Run Biome                                    |
-| `pnpm check:fix`     | Automatically fix formatting and lint issues |
-| `pnpm typecheck`     | Run TypeScript type checking                 |
+| Script                    | Description                           |
+| ------------------------- | ------------------------------------- |
+| `pnpm dev`                | Start the development server          |
+| `pnpm build`              | Build the application                 |
+| `pnpm start`              | Start the production server           |
+| `pnpm db:generate`        | Generate Prisma Client                |
+| `pnpm db:migrate`         | Run development migrations            |
+| `pnpm db:deploy`          | Apply production migrations           |
+| `pnpm db:studio`          | Open Prisma Studio                    |
+| `pnpm test`               | Run tests in watch mode               |
+| `pnpm test:unit`          | Run unit tests                        |
+| `pnpm test:integration`   | Run integration tests                 |
+| `pnpm test:all`           | Run all tests                         |
+| `pnpm test:coverage`      | Generate a coverage report            |
+| `pnpm lint`               | Run Biome                             |
+| `pnpm lint:fix`           | Automatically fix formatting and lint issues |
+| `pnpm check`              | Run the full verification suite       |
+| `pnpm typecheck`          | Run TypeScript type checking          |
 
 # Architecture
 
-The template is designed around a module-driven architecture with a clear separation of concerns.
+The template follows a module-driven architecture with a clear separation of concerns.
 
 * **Routes** define HTTP endpoints and OpenAPI metadata.
 * **Services** contain business logic.
 * **Middleware** provides reusable request processing.
-* **Shared infrastructure** (authentication, logging, pagination, responses, etc.) is isolated from feature modules.
+* **Shared infrastructure** (authentication, logging, pagination, responses, and utilities) is isolated from feature modules.
 
 This structure keeps each feature self-contained while making shared functionality reusable across the application.
 
@@ -276,10 +299,8 @@ This structure keeps each feature self-contained while making shared functionali
 
 # Contributing
 
-Contributions, suggestions, and bug reports are welcome.
-
-If you'd like to improve this template, feel free to open an issue or submit a pull request.
+Contributions are welcome. If you find a bug or have an idea for improvement, feel free to open an issue or submit a pull request.
 
 # License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the LICENSE file for details.
