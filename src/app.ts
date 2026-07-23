@@ -1,5 +1,4 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { Scalar } from "@scalar/hono-api-reference";
 import { API_PREFIX } from "./config/constants.js";
 import { corsMiddleware } from "./middleware/cors.js";
 import { errorHandler } from "./middleware/error.js";
@@ -21,10 +20,8 @@ app.use("*", sessionMiddleware);
 app.use("*", loggerMiddleware);
 
 app.route("/", routes);
-
 app.doc("/openapi.json", openApiDocument);
-
-app.get("/docs", Scalar(scalarConfig));
+app.get("/docs", scalarConfig);
 
 app.notFound(notFound);
 
