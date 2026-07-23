@@ -13,6 +13,10 @@ export const jsonResponse = (description: string, schema: ZodType) => ({
 export const errorResponse = (description: string) =>
 	jsonResponse(description, errorResponseSchema);
 
+export const noContentResponse = {
+	description: "No content",
+};
+
 export const unauthorizedResponse = {
 	401: errorResponse("Unauthorized."),
 };
