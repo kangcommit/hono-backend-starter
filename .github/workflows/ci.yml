@@ -7,20 +7,35 @@ on:
   pull_request:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  test:
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
 
     env:
       NODE_ENV: test
-      LOG_LEVEL: info
-      DATABASE_URL: postgres://user:password@localhost:5432/test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app_test
       BETTER_AUTH_SECRET: test-secret
       APP_URL: http://localhost:3000
       CLIENT_URL: http://localhost:5173
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: app_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d app_test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout repository
@@ -28,10 +43,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 11
-        
-      - name: Setup Node.js
+
+      - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -43,7 +56,10 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm db:generate
 
-      - name: Run Biome
+      - name: Apply migrations
+        run: pnpm db:deploy
+
+      - name: Check code quality
         run: pnpm check
 
       - name: Run TypeScript type check
@@ -52,7 +68,8 @@ jobs:
       - name: Run tests with coverage
         run: pnpm test:coverage
 
-      - name: Upload coverage report
+      - name: Upload coverage
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: coverage-report
@@ -60,6 +77,6 @@ jobs:
 
       - name: Build application
         run: pnpm build
-      
+
       - name: Build Docker image
         run: docker build -t hono-backend-template .
