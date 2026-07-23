@@ -16,7 +16,10 @@ export const auth = betterAuth({
 	plugins: [openAPI(), admin()],
 });
 
+export type SessionUser = typeof auth.$Infer.Session.user;
+export type SessionData = typeof auth.$Infer.Session.session;
+
 export type AuthType = {
-	user: typeof auth.$Infer.Session.user | null;
-	session: typeof auth.$Infer.Session.session | null;
+	user: SessionUser | null;
+	session: SessionData | null;
 };
