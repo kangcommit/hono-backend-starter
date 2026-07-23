@@ -16,7 +16,7 @@ const envSchema = z.object({
 
 	BETTER_AUTH_SECRET: z.string().min(1),
 
-	BETTER_AUTH_URL: z.url(),
+	APP_URL: z.url(),
 
 	CLIENT_URL: z.url(),
 });
