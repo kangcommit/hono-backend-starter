@@ -9,9 +9,13 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN pnpm install --frozen-lockfile
 
+COPY prisma ./prisma
+
+RUN pnpm db:generate
+
 COPY . .
 
-RUN pnpm db:generate && pnpm build
+RUN pnpm build
 
 # ---------- Runner ----------
 FROM node:24-alpine AS runner
