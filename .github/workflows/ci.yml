@@ -59,8 +59,8 @@ jobs:
       - name: Apply migrations
         run: pnpm db:deploy
 
-      - name: Check code quality
-        run: pnpm check
+      - name: Run Biome
+        run: pnpm lint
 
       - name: Run TypeScript type check
         run: pnpm typecheck
