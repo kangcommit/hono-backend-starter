@@ -2,7 +2,7 @@
 	"name": "hono-backend-template",
 	"version": "0.1.0",
 	"type": "module",
-	"packageManager": "pnpm@11.11.0",
+	"packageManager": "pnpm@11.17.0",
 	"engines": {
 		"node": ">=24.0.0",
 		"pnpm": ">=11.0.0"
@@ -22,10 +22,13 @@
 		"db:validate": "prisma validate",
 
 		"test": "vitest",
-		"test:unit": "dotenv -e .env.test -- vitest run",
+		"test:unit": "vitest run",
 		"test:integration": "dotenv -e .env.test -- vitest run --config vitest.integration.config.ts",
 		"test:all": "pnpm test:unit && pnpm test:integration",
-		"test:coverage": "pnpm test:all --coverage",
+
+		"test:unit:coverage": "vitest run --coverage",
+		"test:integration:coverage": "dotenv -e .env.test -- vitest run --config vitest.integration.config.ts --coverage",
+		"test:coverage": "pnpm test:unit:coverage && pnpm test:integration:coverage",
 
 		"typecheck": "tsc --noEmit",
 
@@ -57,6 +60,7 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
+		"dotenv-cli": "^11.0.0",
 		"@biomejs/biome": "2.5.4",
 		"@types/node": "^26.1.1",
 		"@types/pg": "^8.20.0",
