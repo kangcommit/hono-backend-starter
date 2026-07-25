@@ -1,5 +1,11 @@
 # Hono Backend Template
 
+![Node.js](https://img.shields.io/badge/Node.js-24+-339933?logo=node.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
+![Hono](https://img.shields.io/badge/Hono-4.x-E36002)
+![License](https://img.shields.io/badge/License-MIT-green)
+![CI](https://img.shields.io/github/actions/workflow/status/kangcommit/hono-backend-template/ci.yml)
+
 A production-ready backend template built with **Hono**, **TypeScript**, and **Prisma** for developing scalable, maintainable, and type-safe REST APIs.
 
 Whether you're building a personal project or starting a new backend service, this template provides a solid foundation with modern tooling and best practices. It includes authentication, request validation, API documentation, structured logging, Docker support, automated testing, and a module-driven architecture designed for long-term maintainability.
@@ -44,6 +50,7 @@ Whether you're building a personal project or starting a new backend service, th
 
 ```text
 .
+├── docs/
 ├── prisma/
 ├── src/
 │   ├── auth/
@@ -59,8 +66,7 @@ Whether you're building a personal project or starting a new backend service, th
 ├── tests/
 ├── Dockerfile
 ├── docker-compose.yml
-├── docker-compose.dev.yml
-└── README.md
+└── docker-compose.dev.yml
 ```
 
 The project follows a **module-driven architecture**, where each feature owns its routes, schemas, and business logic. Shared infrastructure lives outside feature modules to encourage reuse and consistency.
@@ -74,7 +80,6 @@ After creating a project from this template, update the following values to matc
 | `package.json`              | Change the project name                    |
 | `README.md`                 | Change the project title and description   |
 | `src/config/constants.ts`   | Update `APP_NAME`                          |
-| `docker-compose.yml`        | Update the Compose project name            |
 
 # Getting Started
 
@@ -88,7 +93,7 @@ After creating a project from this template, update the following values to matc
 ## Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/kangcommit/hono-backend-template
 
 cd hono-backend-template
 
@@ -183,35 +188,21 @@ Authorization is application-specific and should be implemented based on your pr
 
 # Testing
 
-Run tests in watch mode.
-
-```bash
-pnpm test
-```
-
-Run unit tests.
-
-```bash
-pnpm test:unit
-```
-
-Run integration tests.
-
-```bash
-pnpm test:integration
-```
-
-Run all tests.
+Run the complete test suite:
 
 ```bash
 pnpm test:all
 ```
 
-Generate a coverage report.
+Generate a coverage report:
 
 ```bash
 pnpm test:coverage
 ```
+
+For more information about the testing strategy, see:
+
+- [docs/testing.md](docs/testing.md)
 
 # Code Quality
 
@@ -274,32 +265,30 @@ GitHub Actions automatically performs:
 
 # Architecture
 
-The template follows a module-driven architecture with a clear separation of concerns.
+This template follows a module-driven architecture with a clear separation of concerns.
 
-* **Routes** define HTTP endpoints and OpenAPI metadata.
-* **Services** contain business logic.
-* **Middleware** provides reusable request processing.
-* **Shared infrastructure** (authentication, logging, pagination, responses, and utilities) is isolated from feature modules.
+For more details about the project structure, design principles, and layer responsibilities, see:
 
-This structure keeps each feature self-contained while making shared functionality reusable across the application.
+- [docs/architecture.md](docs/architecture.md)
 
-# Roadmap
+# Documentation
 
-* [x] Module-driven architecture
-* [x] Better Auth integration
-* [x] OpenAPI documentation
-* [x] Standard API responses
-* [x] Pagination and sorting utilities
-* [x] Docker support
-* [x] GitHub Actions CI
-* [ ] Rate limiting middleware
-* [ ] Example CRUD module
-* [ ] Extended documentation
-* [ ] Additional production middleware
+Additional documentation is available in the `docs` directory.
 
-# Contributing
+| Document | Description |
+|----------|-------------|
+| `docs/architecture.md` | Project architecture and design principles |
+| `docs/conventions.md` | Coding conventions and project structure |
+| `docs/testing.md` | Testing strategy and guidelines |
+| `CONTRIBUTING.md` | Contribution workflow and development guidelines |
 
-Contributions are welcome. If you find a bug or have an idea for improvement, feel free to open an issue or submit a pull request.
+A complete example implementation is available in the `feat/example-domain` branch.
+
+## Contributing
+
+Contributions are welcome. If you find a bug, have a suggestion, or would like to improve the template, feel free to open an issue or submit a pull request.
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing.
 
 # License
 
