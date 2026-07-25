@@ -14,7 +14,7 @@ export function getRoles(user: AuthUser): string[] {
 	);
 }
 
-export function hasRole(user: AuthUser, role: string): boolean {
+function hasRole(user: AuthUser, role: string): boolean {
 	return getRoles(user).includes(role);
 }
 
