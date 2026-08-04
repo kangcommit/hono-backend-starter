@@ -118,7 +118,6 @@ Configure the required environment variables.
 | `APP_URL`            | Public URL of the backend application |
 | `DATABASE_URL`       | PostgreSQL connection string          |
 | `BETTER_AUTH_SECRET` | Better Auth secret                    |
-| `BETTER_AUTH_URL`    | Better Auth base URL                  |
 | `CLIENT_URL`         | Frontend application URL              |
 
 ## Generate Prisma Client
