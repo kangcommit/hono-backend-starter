@@ -5,6 +5,7 @@ import {
 	APP_VERSION,
 } from "../../src/config/constants.js";
 import { APP_STATUS } from "../../src/modules/system/constants.js";
+import { isDatabaseAvailable } from "./helpers/database.js";
 import { api } from "./helpers/path.js";
 import { get } from "./helpers/request.js";
 
@@ -37,13 +38,14 @@ describe("System routes", () => {
 	});
 
 	describe("GET /ready", () => {
-		it("returns ready status when database is available", async () => {
+		it("returns readiness status for the database", async () => {
+			const databaseAvailable = await isDatabaseAvailable();
 			const response = await get(api.ready);
 
-			expect(response.status).toBe(200);
+			expect(response.status).toBe(databaseAvailable ? 200 : 503);
 
 			expect(await response.json()).toEqual({
-				status: APP_STATUS.READY,
+				status: databaseAvailable ? APP_STATUS.READY : APP_STATUS.NOT_READY,
 			});
 		});
 	});

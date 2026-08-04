@@ -1,15 +1,11 @@
 import dotenv from "dotenv";
-import { afterAll, beforeEach } from "vitest";
-import { prisma } from "../../src/lib/prisma.js";
-import { resetDatabase } from "./helpers/database.js";
+import { afterAll } from "vitest";
 
 dotenv.config({
 	path: ".env.test",
 });
 
-beforeEach(async () => {
-	await resetDatabase();
-});
+const { prisma } = await import("../../src/lib/prisma.js");
 
 afterAll(async () => {
 	await prisma.$disconnect();
