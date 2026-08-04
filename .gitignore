@@ -16,6 +16,9 @@ dist/
 
 # generated
 /src/generated/prisma
+.pnpm-store/
+.agents/
+skills-lock.json
 
 # environment
 .env
