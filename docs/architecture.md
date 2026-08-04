@@ -93,6 +93,16 @@ Responsible for:
 
 Routers should remain thin and contain little or no business logic.
 
+Protected routers should opt in to authentication explicitly.
+
+```ts
+import { createProtectedRouter } from "../../auth/protected-router.js";
+
+export const router = createProtectedRouter();
+```
+
+`createProtectedRouter()` applies session lookup before `requireAuth`. Public modules should use a regular `OpenAPIHono` router and should not perform session lookup.
+
 ## Service
 
 Responsible for:
@@ -203,6 +213,7 @@ This template follows several conventions:
 * Validation is performed using Zod.
 * OpenAPI documentation is defined alongside routes.
 * API responses use standardized payload helpers.
+* Authentication is opt-in per protected router.
 * Shared utilities remain framework-agnostic whenever possible.
 
 Following these conventions keeps the codebase consistent as additional modules are added.

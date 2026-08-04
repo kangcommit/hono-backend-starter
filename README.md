@@ -170,6 +170,7 @@ Once the server is running:
 | --------------------- | ---------------------------- |
 | Scalar UI             | `<APP_URL>/api/docs`         |
 | OpenAPI Specification | `<APP_URL>/api/openapi.json` |
+| Current User          | `<APP_URL>/api/me`           |
 
 # Authentication
 
@@ -179,9 +180,19 @@ The template includes:
 
 * Email and password authentication
 * Session management
-* Authentication middleware
+* Opt-in protected route middleware
 * Current user helper
 * Better Auth OpenAPI integration
+
+Session lookup is not registered globally. Public routes stay lightweight, and protected modules opt in by using `createProtectedRouter()`.
+
+```ts
+import { createProtectedRouter } from "../../auth/protected-router.js";
+
+export const postsRouter = createProtectedRouter();
+```
+
+The template includes `GET /api/me` as a minimal protected route example.
 
 Authorization is application-specific and should be implemented based on your project's requirements (for example, roles, permissions, or resource ownership).
 

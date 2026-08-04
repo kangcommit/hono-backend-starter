@@ -139,6 +139,12 @@ Typical cases include:
 * Resource not found
 * Conflict errors
 
+Protected route tests should cover:
+
+* Authenticated requests returning success
+* Unauthenticated requests returning `401`
+* Session lookup failures returning `503`
+
 ---
 
 # General Guidelines

@@ -201,7 +201,19 @@ Avoid using `console.log()` inside application code.
 
 Authentication is handled through Better Auth.
 
-Use the provided middleware and helpers instead of reading session data directly.
+Session lookup is opt-in. Public routes should not use session middleware.
+
+Protected routes should use `createProtectedRouter()`.
+
+```ts
+import { createProtectedRouter } from "../../auth/protected-router.js";
+
+export const router = createProtectedRouter();
+```
+
+Use `getCurrentUser()` inside protected handlers instead of reading session data directly.
+
+Do not apply `requireAuth` without first applying `sessionMiddleware`. `createProtectedRouter()` handles this ordering.
 
 Authorization should be implemented using reusable middleware and permission helpers.
 
