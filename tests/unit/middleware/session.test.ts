@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { ServiceUnavailableError } from "../../../src/errors/http-errors.js";
 import { auth } from "../../../src/lib/auth.js";
 import { sessionMiddleware } from "../../../src/middleware/session.js";
 import {
@@ -49,7 +50,7 @@ describe("sessionMiddleware", () => {
 		expect(next).toHaveBeenCalledOnce();
 	});
 
-	it("continues when getSession throws", async () => {
+	it("throws ServiceUnavailableError when getSession throws", async () => {
 		// Arrange
 		vi.mocked(auth.api.getSession).mockRejectedValue(
 			new Error("Session error"),
@@ -57,12 +58,12 @@ describe("sessionMiddleware", () => {
 
 		const { c, next } = createMiddlewareContext();
 
-		// Act
-		await sessionMiddleware(c as never, next);
+		// Act & Assert
+		await expect(sessionMiddleware(c as never, next)).rejects.toThrow(
+			ServiceUnavailableError,
+		);
 
-		// Assert
-		expect(c.set).toHaveBeenCalledWith("user", null);
-		expect(c.set).toHaveBeenCalledWith("session", null);
-		expect(next).toHaveBeenCalledOnce();
+		expect(c.set).not.toHaveBeenCalled();
+		expect(next).not.toHaveBeenCalled();
 	});
 });

@@ -1,4 +1,5 @@
 import type { MiddlewareHandler } from "hono";
+import { ServiceUnavailableError } from "../errors/http-errors.js";
 import { auth } from "../lib/auth.js";
 import { logger } from "../lib/logger.js";
 
@@ -14,14 +15,14 @@ export const sessionMiddleware: MiddlewareHandler = async (c, next) => {
 		logger.error(
 			{
 				err: error,
+				requestId: c.get("requestId"),
 				path: c.req.path,
 				method: c.req.method,
 			},
 			"Failed to retrieve session",
 		);
 
-		c.set("user", null);
-		c.set("session", null);
+		throw new ServiceUnavailableError("Authentication service unavailable");
 	}
 
 	await next();

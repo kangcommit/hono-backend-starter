@@ -4,9 +4,12 @@ export function createMiddlewareContext(
 	initialValues?: Record<string, unknown>,
 ) {
 	const values = new Map(Object.entries(initialValues ?? {}));
+	const path =
+		typeof initialValues?.path === "string" ? initialValues.path : "/api/posts";
 
 	const c = {
 		req: {
+			path,
 			raw: {
 				headers: new Headers(),
 			},
