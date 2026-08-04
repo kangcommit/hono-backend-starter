@@ -38,4 +38,13 @@ describe("roles", () => {
 
 		expect(result).toBe(false);
 	});
+
+	it("returns false when the user has no roles", () => {
+		const result = isAdmin({
+			...user,
+			role: null,
+		});
+
+		expect(result).toBe(false);
+	});
 });
