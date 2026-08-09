@@ -103,6 +103,16 @@ export const router = createProtectedRouter();
 
 `createProtectedRouter()` applies session lookup before `requireAuth`. Public modules should use a regular `OpenAPIHono` router and should not perform session lookup.
 
+Permission checks are separate from authentication. Use `requirePermission()` after session lookup for routes that need RBAC.
+
+```ts
+import { requirePermission } from "../../middleware/require-permission.js";
+
+router.use("*", requirePermission({ post: ["create"] }));
+```
+
+Authorization decisions that depend on a specific resource, such as ownership, belong in services because they usually require loading domain data.
+
 ## Service
 
 Responsible for:
@@ -214,6 +224,7 @@ This template follows several conventions:
 * OpenAPI documentation is defined alongside routes.
 * API responses use standardized payload helpers.
 * Authentication is opt-in per protected router.
+* RBAC permission checks use shared permission definitions.
 * Shared utilities remain framework-agnostic whenever possible.
 
 Following these conventions keeps the codebase consistent as additional modules are added.

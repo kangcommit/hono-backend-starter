@@ -215,7 +215,19 @@ Use `getCurrentUser()` inside protected handlers instead of reading session data
 
 Do not apply `requireAuth` without first applying `sessionMiddleware`. `createProtectedRouter()` handles this ordering.
 
-Authorization should be implemented using reusable middleware and permission helpers.
+Authorization uses shared RBAC definitions in `src/auth/permissions.ts`.
+
+Use `requirePermission()` for route-level permission checks.
+
+```ts
+import { requirePermission } from "../../middleware/require-permission.js";
+
+router.use("*", requirePermission({ post: ["create"] }));
+```
+
+Keep role definitions centralized. Do not scatter role strings such as `"admin"` through feature modules.
+
+Resource ownership checks belong in services. For example, RBAC may allow `post.update`, while the service still verifies that the user owns the specific post or has an elevated role.
 
 ---
 

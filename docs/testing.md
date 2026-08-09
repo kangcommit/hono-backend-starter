@@ -145,6 +145,13 @@ Protected route tests should cover:
 * Unauthenticated requests returning `401`
 * Session lookup failures returning `503`
 
+RBAC tests should cover:
+
+* Users with permission continuing to the handler
+* Users without permission returning `403`
+* Missing users returning `401`
+* Permission lookup failures returning `503`
+
 ---
 
 # General Guidelines

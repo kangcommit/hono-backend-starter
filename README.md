@@ -181,6 +181,7 @@ The template includes:
 * Email and password authentication
 * Session management
 * Opt-in protected route middleware
+* Role-based access control starter
 * Current user helper
 * Better Auth OpenAPI integration
 
@@ -194,7 +195,22 @@ export const postsRouter = createProtectedRouter();
 
 The template includes `GET /api/me` as a minimal protected route example.
 
-Authorization is application-specific and should be implemented based on your project's requirements (for example, roles, permissions, or resource ownership).
+Authorization uses Better Auth's admin access-control plugin. Shared RBAC definitions live in `src/auth/permissions.ts`, and route-level permission checks can use `requirePermission()`.
+
+```ts
+import { requirePermission } from "../../middleware/require-permission.js";
+
+router.use("*", requirePermission({ post: ["create"] }));
+```
+
+The starter defines two roles:
+
+| Role    | Default intent                                      |
+| ------- | --------------------------------------------------- |
+| `user`  | Can create and read posts                           |
+| `admin` | Can create, read, update, and delete posts and users |
+
+Resource ownership checks should still live in services. RBAC decides whether a user may perform an action class; ownership decides whether they may perform it on a specific resource.
 
 # Testing
 
