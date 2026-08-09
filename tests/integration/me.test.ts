@@ -1,0 +1,68 @@
+import { describe, expect, it, vi } from "vitest";
+import { API_PREFIX } from "../../src/config/constants.js";
+import { session, user } from "../helpers/fixtures/auth.js";
+
+vi.mock("../../src/lib/auth.js", () => ({
+	auth: {
+		api: {
+			getSession: vi.fn(),
+		},
+		handler: vi.fn(),
+	},
+}));
+
+const { auth } = await import("../../src/lib/auth.js");
+const { default: app } = await import("../../src/app.js");
+
+describe("GET /me", () => {
+	it("returns the current user", async () => {
+		// Arrange
+		vi.mocked(auth.api.getSession).mockResolvedValue({
+			user,
+			session,
+		});
+
+		// Act
+		const response = await app.request(`${API_PREFIX}/me`);
+
+		// Assert
+		expect(response.status).toBe(200);
+		expect(await response.json()).toEqual({
+			data: {
+				...user,
+				createdAt: user.createdAt.toISOString(),
+				updatedAt: user.updatedAt.toISOString(),
+			},
+		});
+	});
+
+	it("returns 401 when unauthenticated", async () => {
+		// Arrange
+		vi.mocked(auth.api.getSession).mockResolvedValue(null);
+
+		// Act
+		const response = await app.request(`${API_PREFIX}/me`);
+
+		// Assert
+		expect(response.status).toBe(401);
+		expect(await response.json()).toEqual({
+			message: "Unauthorized",
+		});
+	});
+
+	it("returns 503 when session lookup fails", async () => {
+		// Arrange
+		vi.mocked(auth.api.getSession).mockRejectedValue(
+			new Error("Session lookup failed"),
+		);
+
+		// Act
+		const response = await app.request(`${API_PREFIX}/me`);
+
+		// Assert
+		expect(response.status).toBe(503);
+		expect(await response.json()).toEqual({
+			message: "Authentication service unavailable",
+		});
+	});
+});
