@@ -1,3 +1,4 @@
+import type { MiddlewareHandler } from "hono";
 import { describe, expect, it, vi } from "vitest";
 import { API_PREFIX } from "../../../src/config/constants.js";
 import { prisma } from "../../../src/lib/prisma.js";
@@ -25,9 +26,12 @@ vi.mock("../../../src/middleware/require-auth.js", () => ({
 }));
 
 vi.mock("../../../src/middleware/require-permission.js", () => ({
-	requirePermission: vi.fn(() => async (_c, next) => {
-		await next();
-	}),
+	requirePermission: vi.fn(
+		() =>
+			(async (_c, next) => {
+				await next();
+			}) satisfies MiddlewareHandler,
+	),
 }));
 
 const { default: app } = await import("../../../src/app.js");
