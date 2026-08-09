@@ -3,7 +3,7 @@ import {
 	ForbiddenError,
 	NotFoundError,
 } from "../../../src/errors/http-errors.js";
-import type { Post } from "../../../src/generated/prisma/client.js";
+import type { Post, Prisma } from "../../../src/generated/prisma/client.js";
 import { prisma } from "../../../src/lib/prisma.js";
 import { buildWhere } from "../../../src/modules/posts/filters.js";
 import { postRepository } from "../../../src/modules/posts/repository.js";
@@ -36,6 +36,17 @@ const postDto = {
 	published: false,
 	createdAt: createdAt.toISOString(),
 	updatedAt: updatedAt.toISOString(),
+};
+
+const postCreateInput: Prisma.PostCreateInput = {
+	title: "Hello World",
+	slug: "hello-world",
+	content: "Post content",
+	author: {
+		connect: {
+			id: user.id,
+		},
+	},
 };
 
 describe("buildWhere", () => {
@@ -131,11 +142,9 @@ describe("postRepository", () => {
 			where: { id: post.id },
 		});
 
-		await expect(postRepository.create({ title: post.title })).resolves.toBe(
-			post,
-		);
+		await expect(postRepository.create(postCreateInput)).resolves.toBe(post);
 		expect(prisma.post.create).toHaveBeenCalledWith({
-			data: { title: post.title },
+			data: postCreateInput,
 		});
 
 		await expect(
@@ -248,6 +257,7 @@ describe("postService", () => {
 				title: "Hello World",
 				slug: "hello-world",
 				content: "Post content",
+				published: false,
 			}),
 		).rejects.toThrow("A post with this slug already exists.");
 	});
