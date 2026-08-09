@@ -3,6 +3,12 @@ import { describe, expect, it, vi } from "vitest";
 import { API_PREFIX } from "../../../src/config/constants.js";
 import { prisma } from "../../../src/lib/prisma.js";
 import { user } from "../../helpers/fixtures/auth.js";
+import {
+	del,
+	get,
+	patch,
+	post as postRequest,
+} from "../../integration/helpers/request.js";
 
 vi.mock("../../../src/lib/auth.js", () => ({
 	auth: {
@@ -33,8 +39,6 @@ vi.mock("../../../src/middleware/require-permission.js", () => ({
 			}) satisfies MiddlewareHandler,
 	),
 }));
-
-const { default: app } = await import("../../../src/app.js");
 
 const createdAt = new Date("2026-01-01T00:00:00.000Z");
 const updatedAt = new Date("2026-01-02T00:00:00.000Z");
@@ -67,7 +71,7 @@ describe("Posts routes", () => {
 		vi.mocked(prisma.post.count).mockResolvedValue(1);
 
 		// Act
-		const response = await app.request(
+		const response = await get(
 			`${API_PREFIX}/posts?page=1&limit=10&sort=createdAt&order=desc`,
 		);
 
@@ -89,7 +93,7 @@ describe("Posts routes", () => {
 		vi.mocked(prisma.post.findUnique).mockResolvedValue(post);
 
 		// Act
-		const response = await app.request(`${API_PREFIX}/posts/post-1`);
+		const response = await get(`${API_PREFIX}/posts/post-1`);
 
 		// Assert
 		expect(response.status).toBe(200);
@@ -103,7 +107,7 @@ describe("Posts routes", () => {
 		vi.mocked(prisma.post.findUnique).mockResolvedValue(null);
 
 		// Act
-		const response = await app.request(`${API_PREFIX}/posts/missing`);
+		const response = await get(`${API_PREFIX}/posts/missing`);
 
 		// Assert
 		expect(response.status).toBe(404);
@@ -117,17 +121,11 @@ describe("Posts routes", () => {
 		vi.mocked(prisma.post.create).mockResolvedValue(post);
 
 		// Act
-		const response = await app.request(`${API_PREFIX}/posts`, {
-			method: "POST",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify({
-				title: post.title,
-				slug: post.slug,
-				content: post.content,
-				published: post.published,
-			}),
+		const response = await postRequest(`${API_PREFIX}/posts`, {
+			title: post.title,
+			slug: post.slug,
+			content: post.content,
+			published: post.published,
 		});
 
 		// Assert
@@ -146,14 +144,8 @@ describe("Posts routes", () => {
 		});
 
 		// Act
-		const response = await app.request(`${API_PREFIX}/posts/post-1`, {
-			method: "PATCH",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify({
-				title: "Updated",
-			}),
+		const response = await patch(`${API_PREFIX}/posts/post-1`, {
+			title: "Updated",
 		});
 
 		// Assert
@@ -172,9 +164,7 @@ describe("Posts routes", () => {
 		vi.mocked(prisma.post.delete).mockResolvedValue(post);
 
 		// Act
-		const response = await app.request(`${API_PREFIX}/posts/post-1`, {
-			method: "DELETE",
-		});
+		const response = await del(`${API_PREFIX}/posts/post-1`);
 
 		// Assert
 		expect(response.status).toBe(200);
