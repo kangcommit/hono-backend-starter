@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const CurrentUserSchema = z.object({
+const CurrentUserSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	email: z.email(),

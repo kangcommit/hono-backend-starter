@@ -2,7 +2,7 @@ import { Prisma } from "../../src/generated/prisma/client.js";
 
 type PrismaErrorCode = Prisma.PrismaClientKnownRequestError["code"];
 
-export function createPrismaKnownRequestError(
+function createPrismaKnownRequestError(
 	code: PrismaErrorCode,
 	message = "Prisma error",
 ): Prisma.PrismaClientKnownRequestError {
