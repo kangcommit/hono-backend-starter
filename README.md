@@ -185,12 +185,16 @@ The template includes:
 * Current user helper
 * Better Auth OpenAPI integration
 
-Session lookup is not registered globally. Public routes stay lightweight, and protected modules opt in by using `createProtectedRouter()`.
+Session lookup is not registered globally. Public routes stay lightweight, and protected route groups opt in by using `createProtectedRouter()`.
 
 ```ts
 import { createProtectedRouter } from "../../auth/protected-router.js";
 
-export const postsRouter = createProtectedRouter();
+const protectedPostsRouter = createProtectedRouter();
+
+protectedPostsRouter.openapi(createPostRoute, createPostHandler);
+
+postsRouter.route("/", protectedPostsRouter);
 ```
 
 The template includes `GET /api/me` as a minimal protected route example.
@@ -200,7 +204,11 @@ Authorization uses Better Auth's admin access-control plugin. Shared RBAC defini
 ```ts
 import { requirePermission } from "../../middleware/require-permission.js";
 
-router.use("*", requirePermission({ post: ["create"] }));
+createRoute({
+	method: "post",
+	path: "/",
+	middleware: [requirePermission({ post: ["create"] })],
+});
 ```
 
 The starter defines two roles:

@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { getCurrentUser } from "../../auth/current-user.js";
+import { createProtectedRouter } from "../../auth/protected-router.js";
 import type { AuthType } from "../../lib/auth.js";
 import { data, paginated } from "../../response/payload.js";
 import {
@@ -12,6 +13,7 @@ import {
 import { postService } from "./service.js";
 
 export const postsRouter = new OpenAPIHono<{ Variables: AuthType }>();
+const protectedPostsRouter = createProtectedRouter();
 
 postsRouter.openapi(listPostsRoute, async (c) => {
 	const query = c.req.valid("query");
@@ -29,7 +31,7 @@ postsRouter.openapi(getPostRoute, async (c) => {
 	return c.json(data(post));
 });
 
-postsRouter.openapi(createPostRoute, async (c) => {
+protectedPostsRouter.openapi(createPostRoute, async (c) => {
 	const body = c.req.valid("json");
 
 	const user = getCurrentUser(c);
@@ -39,7 +41,7 @@ postsRouter.openapi(createPostRoute, async (c) => {
 	return c.json(data(post), 201);
 });
 
-postsRouter.openapi(updatePostRoute, async (c) => {
+protectedPostsRouter.openapi(updatePostRoute, async (c) => {
 	const { id } = c.req.valid("param");
 	const body = c.req.valid("json");
 
@@ -50,7 +52,7 @@ postsRouter.openapi(updatePostRoute, async (c) => {
 	return c.json(data(post));
 });
 
-postsRouter.openapi(deletePostRoute, async (c) => {
+protectedPostsRouter.openapi(deletePostRoute, async (c) => {
 	const { id } = c.req.valid("param");
 
 	const user = getCurrentUser(c);
@@ -59,3 +61,5 @@ postsRouter.openapi(deletePostRoute, async (c) => {
 
 	return c.json(null);
 });
+
+postsRouter.route("/", protectedPostsRouter);

@@ -68,6 +68,13 @@ Each layer has a specific responsibility and should remain focused on that respo
 
 # Authorization
 
+The example module keeps read operations public and protects write operations.
+
+- `GET /posts`
+- `GET /posts/{id}`
+
+Create, update, and delete operations are registered on a `createProtectedRouter()` sub-router. This keeps public reads lightweight while ensuring mutating handlers have session lookup and authentication before permission checks run.
+
 Authorization is performed in two stages.
 
 ## Route-level authorization

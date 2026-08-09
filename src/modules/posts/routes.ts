@@ -1,5 +1,4 @@
 import { createRoute } from "@hono/zod-openapi";
-import { requireAuth } from "../../middleware/require-auth.js";
 import { requirePermission } from "../../middleware/require-permission.js";
 import { requestBody } from "../../openapi/requests.js";
 import {
@@ -60,7 +59,7 @@ export const createPostRoute = createRoute({
 	tags,
 	summary: "Create post",
 	description: "Creates a new post.",
-	middleware: [requireAuth, requirePermission(POST_PERMISSIONS.CREATE)],
+	middleware: [requirePermission(POST_PERMISSIONS.CREATE)],
 	request: {
 		...requestBody(CreatePostSchema),
 	},
@@ -76,7 +75,7 @@ export const updatePostRoute = createRoute({
 	tags,
 	summary: "Update post",
 	description: "Updates an existing post.",
-	middleware: [requireAuth, requirePermission(POST_PERMISSIONS.UPDATE)],
+	middleware: [requirePermission(POST_PERMISSIONS.UPDATE)],
 	request: {
 		params: PostParamsSchema,
 		...requestBody(UpdatePostSchema),
@@ -94,7 +93,7 @@ export const deletePostRoute = createRoute({
 	tags,
 	summary: "Delete post",
 	description: "Deletes a post.",
-	middleware: [requireAuth, requirePermission(POST_PERMISSIONS.DELETE)],
+	middleware: [requirePermission(POST_PERMISSIONS.DELETE)],
 	request: {
 		params: PostParamsSchema,
 	},

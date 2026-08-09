@@ -101,14 +101,34 @@ import { createProtectedRouter } from "../../auth/protected-router.js";
 export const router = createProtectedRouter();
 ```
 
-`createProtectedRouter()` applies session lookup before `requireAuth`. Public modules should use a regular `OpenAPIHono` router and should not perform session lookup.
+`createProtectedRouter()` applies session lookup before `requireAuth`. Modules where every route is protected can export a protected router directly. Mixed modules should keep public routes on a regular `OpenAPIHono` router and mount a protected sub-router for authenticated actions.
+
+```ts
+export const postsRouter = new OpenAPIHono<{ Variables: AuthType }>();
+const protectedPostsRouter = createProtectedRouter();
+
+postsRouter.openapi(listPostsRoute, listPostsHandler);
+postsRouter.openapi(getPostRoute, getPostHandler);
+
+protectedPostsRouter.openapi(createPostRoute, createPostHandler);
+protectedPostsRouter.openapi(updatePostRoute, updatePostHandler);
+protectedPostsRouter.openapi(deletePostRoute, deletePostHandler);
+
+postsRouter.route("/", protectedPostsRouter);
+```
+
+Public modules should use a regular `OpenAPIHono` router and should not perform session lookup.
 
 Permission checks are separate from authentication. Use `requirePermission()` after session lookup for routes that need RBAC.
 
 ```ts
 import { requirePermission } from "../../middleware/require-permission.js";
 
-router.use("*", requirePermission({ post: ["create"] }));
+createRoute({
+	method: "post",
+	path: "/",
+	middleware: [requirePermission({ post: ["create"] })],
+});
 ```
 
 Authorization decisions that depend on a specific resource, such as ownership, belong in services because they usually require loading domain data.

@@ -203,12 +203,28 @@ Authentication is handled through Better Auth.
 
 Session lookup is opt-in. Public routes should not use session middleware.
 
-Protected routes should use `createProtectedRouter()`.
+Modules where every route is protected should use `createProtectedRouter()`.
 
 ```ts
 import { createProtectedRouter } from "../../auth/protected-router.js";
 
 export const router = createProtectedRouter();
+```
+
+Modules that mix public and protected routes should keep public handlers on a regular router and mount a protected sub-router for authenticated handlers.
+
+```ts
+export const postsRouter = new OpenAPIHono<{ Variables: AuthType }>();
+const protectedPostsRouter = createProtectedRouter();
+
+postsRouter.openapi(listPostsRoute, listPostsHandler);
+postsRouter.openapi(getPostRoute, getPostHandler);
+
+protectedPostsRouter.openapi(createPostRoute, createPostHandler);
+protectedPostsRouter.openapi(updatePostRoute, updatePostHandler);
+protectedPostsRouter.openapi(deletePostRoute, deletePostHandler);
+
+postsRouter.route("/", protectedPostsRouter);
 ```
 
 Use `getCurrentUser()` inside protected handlers instead of reading session data directly.
@@ -222,7 +238,11 @@ Use `requirePermission()` for route-level permission checks.
 ```ts
 import { requirePermission } from "../../middleware/require-permission.js";
 
-router.use("*", requirePermission({ post: ["create"] }));
+createRoute({
+	method: "post",
+	path: "/",
+	middleware: [requirePermission({ post: ["create"] })],
+});
 ```
 
 Keep role definitions centralized. Do not scatter role strings such as `"admin"` through feature modules.
