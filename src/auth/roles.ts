@@ -5,8 +5,6 @@ export const ROLES = {
 	USER: "user",
 } as const;
 
-export type Role = (typeof ROLES)[keyof typeof ROLES];
-
 export function getRoles(user: AuthUser): string[] {
 	return (
 		user.role
