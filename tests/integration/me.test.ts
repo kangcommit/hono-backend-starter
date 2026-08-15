@@ -28,11 +28,9 @@ describe("GET /me", () => {
 		// Assert
 		expect(response.status).toBe(200);
 		expect(await response.json()).toEqual({
-			data: {
-				...user,
-				createdAt: user.createdAt.toISOString(),
-				updatedAt: user.updatedAt.toISOString(),
-			},
+			...user,
+			createdAt: user.createdAt.toISOString(),
+			updatedAt: user.updatedAt.toISOString(),
 		});
 	});
 

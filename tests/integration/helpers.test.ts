@@ -18,7 +18,7 @@ import {
 	serviceUnavailableResponse,
 } from "../../src/openapi/responses.js";
 import { ErrorResponseSchema } from "../../src/openapi/schema.js";
-import { data, paginated } from "../../src/response/payload.js";
+import { paginated } from "../../src/response/payload.js";
 
 vi.mock("../../src/lib/auth.js", () => ({
 	auth: {
@@ -78,14 +78,8 @@ describe("HTTP errors", () => {
 });
 
 describe("response helpers", () => {
-	it("wraps single and paginated payloads", () => {
+	it("wraps paginated payloads", () => {
 		// Assert
-		expect(data({ id: "post-1" })).toEqual({
-			data: {
-				id: "post-1",
-			},
-		});
-
 		expect(
 			paginated([{ id: "post-1" }], {
 				page: 1,

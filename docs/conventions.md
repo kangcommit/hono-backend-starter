@@ -158,11 +158,11 @@ Single resource:
 
 ```json
 {
-  "data": {}
+  "id": "resource-id"
 }
 ```
 
-Collection:
+Paginated collection:
 
 ```json
 {

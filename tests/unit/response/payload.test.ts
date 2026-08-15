@@ -1,20 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { data, paginated } from "../../../src/response/payload.js";
+import { paginated } from "../../../src/response/payload.js";
 
 describe("response payload helpers", () => {
-	it("wraps a value in a data object", () => {
-		// Act
-		const result = data({ id: "post-1", title: "Hello" });
-
-		// Assert
-		expect(result).toEqual({
-			data: {
-				id: "post-1",
-				title: "Hello",
-			},
-		});
-	});
-
 	it("wraps a collection with pagination metadata", () => {
 		// Arrange
 		const meta = {

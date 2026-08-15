@@ -1,6 +1,6 @@
 import z from "zod";
 
-const CurrentUserSchema = z.object({
+export const CurrentUserResponseSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	email: z.email(),
@@ -8,8 +8,4 @@ const CurrentUserSchema = z.object({
 	image: z.string().nullable().optional(),
 	createdAt: z.iso.datetime(),
 	updatedAt: z.iso.datetime(),
-});
-
-export const CurrentUserResponseSchema = z.object({
-	data: CurrentUserSchema,
 });
