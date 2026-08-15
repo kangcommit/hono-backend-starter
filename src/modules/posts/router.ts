@@ -2,7 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { getCurrentUser } from "../../auth/current-user.js";
 import { createProtectedRouter } from "../../auth/protected-router.js";
 import type { AuthType } from "../../lib/auth.js";
-import { data, paginated } from "../../response/payload.js";
+import { paginated } from "../../response/payload.js";
 import {
 	createPostRoute,
 	deletePostRoute,
@@ -28,7 +28,7 @@ postsRouter.openapi(getPostRoute, async (c) => {
 
 	const post = await postService.findById(id);
 
-	return c.json(data(post));
+	return c.json(post);
 });
 
 protectedPostsRouter.openapi(createPostRoute, async (c) => {
@@ -38,7 +38,7 @@ protectedPostsRouter.openapi(createPostRoute, async (c) => {
 
 	const post = await postService.create(user.id, body);
 
-	return c.json(data(post), 201);
+	return c.json(post, 201);
 });
 
 protectedPostsRouter.openapi(updatePostRoute, async (c) => {
@@ -49,7 +49,7 @@ protectedPostsRouter.openapi(updatePostRoute, async (c) => {
 
 	const post = await postService.update(id, user, body);
 
-	return c.json(data(post));
+	return c.json(post);
 });
 
 protectedPostsRouter.openapi(deletePostRoute, async (c) => {

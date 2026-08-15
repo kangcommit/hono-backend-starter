@@ -97,9 +97,7 @@ describe("Posts routes", () => {
 
 		// Assert
 		expect(response.status).toBe(200);
-		expect(await response.json()).toEqual({
-			data: postDto,
-		});
+		expect(await response.json()).toEqual(postDto);
 	});
 
 	it("returns 404 when a post does not exist", async () => {
@@ -130,9 +128,7 @@ describe("Posts routes", () => {
 
 		// Assert
 		expect(response.status).toBe(201);
-		expect(await response.json()).toEqual({
-			data: postDto,
-		});
+		expect(await response.json()).toEqual(postDto);
 	});
 
 	it("updates a post", async () => {
@@ -151,10 +147,8 @@ describe("Posts routes", () => {
 		// Assert
 		expect(response.status).toBe(200);
 		expect(await response.json()).toEqual({
-			data: {
-				...postDto,
-				title: "Updated",
-			},
+			...postDto,
+			title: "Updated",
 		});
 	});
 
