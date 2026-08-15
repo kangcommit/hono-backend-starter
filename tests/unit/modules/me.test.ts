@@ -25,9 +25,12 @@ describe("GET /me", () => {
 
 		expect(response.status).toBe(200);
 		expect(await response.json()).toEqual({
-			...user,
-			createdAt: user.createdAt.toISOString(),
-			updatedAt: user.updatedAt.toISOString(),
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			emailVerified: user.emailVerified,
+			image: user.image,
+			role: user.role,
 		});
 	});
 

@@ -6,6 +6,5 @@ export const CurrentUserResponseSchema = z.object({
 	email: z.email(),
 	emailVerified: z.boolean(),
 	image: z.string().nullable().optional(),
-	createdAt: z.iso.datetime(),
-	updatedAt: z.iso.datetime(),
+	role: z.string().nullable(),
 });

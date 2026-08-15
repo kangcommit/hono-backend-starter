@@ -10,6 +10,7 @@ export const user: SessionUser = {
 	createdAt: new Date("2026-01-01"),
 	updatedAt: new Date("2026-01-01"),
 	banned: false,
+	role: null,
 };
 
 export const session: Session = {
